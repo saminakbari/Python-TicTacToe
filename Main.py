@@ -49,6 +49,8 @@ class Main:
                 break
             print("The column number must be between 1 and 3.\nEnter the column again:", end='')
         self.board[entered_row - 1][entered_col - 1] = self.player_chars[self.current_player]
+
+    def change_turn(self):
         if self.current_player == 0:
             self.current_player = 1
         else:
@@ -62,7 +64,28 @@ class Main:
 
     def find_winner(self):
         for i in range(3):
+            for j in range(3):
+                if self.board[i][j] != self.player_chars[self.current_player]:
+                    break
+            return self.current_player
 
+        for i in range(3):
+            for j in range(3):
+                if self.board[j][i] != self.player_chars[self.current_player]:
+                    break
+            return self.current_player
+
+        for i in range(3):
+            if self.board[i][i] != self.player_chars[self.current_player]:
+                break
+            return self.current_player
+
+        for i in range(3):
+            if self.board[i][2-i] != self.player_chars[self.current_player]:
+                break
+            return self.current_player
+        
+        return -1
 
 
 main = Main()
