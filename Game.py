@@ -7,19 +7,24 @@ class Game:
         for i in range(3):
             for j in range(3):
                 self.board[i][j].character = '-'
-        self.player_names = [0, 0]
-        self.player_names[0] = ''
-        self.player_names[1] = ''
-        self.player_chars = [0, 0]
-        self.player_chars[0] = ''
-        self.player_chars[1] = ''
+        self.player_names = ['', '']
+        self.player_chars = ['', '']
         self.current_player = 0
 
     def get_player_names(self):
-        print("Please enter the first player's name: ")
-        self.player_names[0] = input()
-        print("Please enter the second player's name: ")
-        self.player_names[1] = input()
+        while True:
+            print("Please enter the first player's name: ")
+            i = input()
+            if i != '':
+                self.player_names[0] = i
+                break
+
+        while True:
+            print("Please enter the second player's name: ")
+            i = input()
+            if i != '':
+                self.player_names[1] = i
+                break
 
     def specify_chars(self):
         print("Please enter the first player's character (x/o): ")
@@ -41,14 +46,24 @@ class Game:
         while True:
             print("row:", end=' ')
             while True:
-                entered_row = int(input())
+                i = input()
+                try:
+                    entered_row = int(i)
+                except:
+                    print("Please enter an integer:")
+                    continue
                 if 1 <= entered_row <= 3:
                     break
                 print("The row number must be between 1 and 3.\nEnter the row again:", end='')
 
             print("column:", end='')
             while True:
-                entered_col = int(input())
+                i = input()
+                try:
+                    entered_col = int(i)
+                except:
+                    print("Please enter an integer:")
+                    continue
                 if 1 <= entered_col <= 3:
                     break
                 print("The column number must be between 1 and 3.\nEnter the column again:", end='')
@@ -113,23 +128,4 @@ class Game:
         return 2  # No one wins.
 
 
-game = Game()
-game.get_player_names()
-game.specify_chars()
-print("Press Enter key to start the game")
-input()
-while True:
-    game.show_board()
-    game.next_move()
-    winner = game.find_winner()
-    if winner == -1:
-        game.change_turn()
-        continue
 
-    if winner == 2:
-        game.show_board()
-        print("Draw!")
-    else:
-        game.show_board()
-        print(game.player_names[winner] + " wins!")
-    break
