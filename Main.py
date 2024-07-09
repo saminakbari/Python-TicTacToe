@@ -14,8 +14,8 @@ def write_to_file(filename, content):
 
 
 def write_game_result(given_game, result):
-    content = "Player 1: " + given_game.player_names[0]
-    content += "\nPlayer 2: " + given_game.player_names[1]
+    content = "Player 1: " + given_game.players[0].name
+    content += "\nPlayer 2: " + given_game.players[1].name
     content += "\nResult: " + str(result)
     content += "\n------------------------------------\n"
     write_to_file("history.txt", content)
@@ -36,39 +36,45 @@ with open("history.txt", "w") as f:
     f.write("")
 
 print("Welcome to Tic Tac Toe game!")
+
+
+def get_name():
+    name = input("Enter your name: ")
+    if name != '':
+        return name
+    return get_name()
+
+
+def execute_the_game(game):
+    game.show_board()
+    game.next_move()
+    winner = game.find_winner()
+    if winner == -1:
+        game.change_turn()
+        execute_the_game(game)
+
+    if winner == 2:
+        game.show_board()
+        print("Draw!")
+        write_game_result(game, "Draw.")
+    else:
+        game.show_board()
+        print(game.players[winner].name + " wins!")
+        write_game_result(game, game.players[winner].name + " won.")
+
+
 while True:
-    print("Press Enter key to start a game. You can enter 'e' to exit the game.")
-    print("If you want to see the history, press 'h'.")
-    i = input()
-    if i == 'e':
+    print("Press Enter key to start a game. You can enter 'e' to exit the game.\n"
+          "If you want to see the history, press 'h'.")
+    entered_char = input()
+    if entered_char == 'e':
         break
-    elif i == 'h':
-        while True:
-            print("Enter your name:", end=' ')
-            i = input()
-            if i != '':
-                show_history(i)
-                break
+    elif entered_char == 'h':
+        show_history(get_name())
 
     else:
         game = Game()
         game.get_player_names(0)
         game.get_player_names(1)
         game.specify_chars("Please enter the first player's character (x/o): ")
-        while True:
-            game.show_board()
-            game.next_move()
-            winner = game.find_winner()
-            if winner == -1:
-                game.change_turn()
-                continue
-
-            if winner == 2:
-                game.show_board()
-                print("Draw!")
-                write_game_result(game, "Draw.")
-            else:
-                game.show_board()
-                print(game.players[winner].name + " wins!")
-                write_game_result(game, game.players[winner].name + " won.")
-            break
+        execute_the_game(game)
