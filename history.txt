@@ -1,20 +1,4 @@
-Player 1: d
-Player 2: x
-Result: d won.
-------------------------------------
-Player 1: d
-Player 2: x
-Result: x won.
-------------------------------------
-Player 1: d
-Player 2: x
-Result: x won.
-------------------------------------
-Player 1: d
-Player 2: x
-Result: x won.
-------------------------------------
-Player 1: d
-Player 2: x
-Result: x won.
+Player 1: s
+Player 2: k
+Result: s won.
 ------------------------------------

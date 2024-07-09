@@ -52,23 +52,25 @@ def execute_the_game(game):
     if winner == -1:
         game.change_turn()
         execute_the_game(game)
+        return
 
     if winner == 2:
         game.show_board()
         print("Draw!")
         write_game_result(game, "Draw.")
+
     else:
         game.show_board()
         print(game.players[winner].name + " wins!")
         write_game_result(game, game.players[winner].name + " won.")
 
 
-while True:
+def run_program():
     print("Press Enter key to start a game. You can enter 'e' to exit the game.\n"
           "If you want to see the history, press 'h'.")
     entered_char = input()
     if entered_char == 'e':
-        break
+        return
     elif entered_char == 'h':
         show_history(get_name())
 
@@ -78,3 +80,6 @@ while True:
         game.get_player_names(1)
         game.specify_chars("Please enter the first player's character (x/o): ")
         execute_the_game(game)
+    run_program()
+
+run_program()
