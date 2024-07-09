@@ -1,4 +1,0 @@
-Player 1: samin
-Player 2: kimia
-Result: samin won.
-------------------------------------

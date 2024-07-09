@@ -1,6 +1,33 @@
 from Board import Board
 
 
+def get_an_integer(message):
+    print(message)
+    given_input = input()
+    try:
+        return int(given_input)
+    except:
+        return get_an_integer("Please enter an integer:")
+
+
+def get_int_in_range(message, minimum, maximum, axis):
+    given_input = get_an_integer(message)
+    if minimum <= given_input <= maximum:
+        return given_input
+    return get_int_in_range("The " + axis + " number must be between 1 and 3."
+                                            " Enter the " + axis + " again:", minimum, maximum, axis)
+
+
+def get_coordinates(given_game):
+    entered_row = get_int_in_range("row: ", 1, 3, "row")
+    entered_col = get_int_in_range("column: ", 1, 3, "column")
+
+    if given_game.board[entered_row - 1][entered_col - 1].character == '-':
+        return given_game.board[entered_row - 1][entered_col - 1]
+    print("This place is not empty. Enter the row and column again.")
+    return get_coordinates(given_game)
+
+
 class Game:
     def __init__(self):
         self.board = Board()
@@ -43,35 +70,8 @@ class Game:
 
     def next_move(self):
         print(self.player_names[self.current_player] + " is now playing.")
-        while True:
-            print("row:", end=' ')
-            while True:
-                i = input()
-                try:
-                    entered_row = int(i)
-                except:
-                    print("Please enter an integer:")
-                    continue
-                if 1 <= entered_row <= 3:
-                    break
-                print("The row number must be between 1 and 3.\nEnter the row again:", end='')
-
-            print("column:", end='')
-            while True:
-                i = input()
-                try:
-                    entered_col = int(i)
-                except:
-                    print("Please enter an integer:")
-                    continue
-                if 1 <= entered_col <= 3:
-                    break
-                print("The column number must be between 1 and 3.\nEnter the column again:", end='')
-
-            if self.board[entered_row - 1][entered_col - 1].character == '-':
-                self.board[entered_row - 1][entered_col - 1].character = self.player_chars[self.current_player]
-                break
-            print("This place is not empty. Enter the row and column again.")
+        specified_cell = get_coordinates(self)
+        specified_cell.character = self.player_chars[self.current_player]
 
     def change_turn(self):
         if self.current_player == 0:
@@ -126,6 +126,3 @@ class Game:
                 if self.board[i][j].character == '-':
                     return -1  # Not finished.
         return 2  # No one wins.
-
-
-
