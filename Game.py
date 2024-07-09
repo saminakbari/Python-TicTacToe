@@ -36,42 +36,38 @@ class Game:
             for j in range(3):
                 self.board[i][j].character = '-'
         self.players = [Player.Player(), Player.Player()]
+        self.player_chars = ['', '']
         self.current_player = 0
 
-    def get_player_names(self, ):
-        while True:
-            print("Please enter the first player's name: ")
-            i = input()
-            if i != '':
-                self.players[0].name = i
-                break
+    def get_player_names(self, index):
+        if index == 0:
+            message = "Please enter the first player's name: "
+        else:
+            message = "Please enter the first player's name: "
 
-        while True:
-            print("Please enter the second player's name: ")
-            i = input()
-            if i != '':
-                self.players[1].name = i
-                break
+        print(message)
+        given_input = input()
+        if given_input != '':
+            self.players[index].name = given_input
+        else:
+            self.get_player_names(index)
 
-    def specify_chars(self):
-        print("Please enter the first player's character (x/o): ")
-        while True:
-            char = input()
-            if char == 'x' or char == 'X':
-                self.players[0].character = 'x'
-                self.players[1].character = 'o'
-                break
-            elif char == 'o' or char == 'O':
-                self.players[0].character = 'o'
-                self.players[1].character = 'x'
-                break
-            else:
-                print("Please enter either 'x' or 'o'")
+    def specify_chars(self, message):
+        print(message)
+        char = input()
+        if char == 'x' or char == 'X':
+            self.player_chars[0] = 'x'
+            self.player_chars[1] = 'o'
+        elif char == 'o' or char == 'O':
+            self.player_chars[0] = 'o'
+            self.player_chars[1] = 'x'
+        else:
+            self.specify_chars("Please enter either 'x' or 'o'")
 
     def next_move(self):
         print(self.players[self.current_player].name + " is now playing.")
         specified_cell = get_coordinates(self)
-        specified_cell.character = self.players[self.current_player].character
+        specified_cell.character = self.player_chars[self.current_player]
 
     def change_turn(self):
         if self.current_player == 0:
@@ -89,7 +85,7 @@ class Game:
         for row in range(3):
             cur_player_wins = True
             for col in range(3):
-                if self.board[row][col].character != self.players[self.current_player].character:
+                if self.board[row][col].character != self.player_chars[self.current_player]:
                     cur_player_wins = False
                     break
             if cur_player_wins:
@@ -98,7 +94,7 @@ class Game:
         for col in range(3):
             cur_player_wins = True
             for row in range(3):
-                if self.board[row][col].character != self.players[self.current_player].character:
+                if self.board[row][col].character != self.player_chars[self.current_player]:
                     cur_player_wins = False
                     break
             if cur_player_wins:
@@ -106,7 +102,7 @@ class Game:
 
         cur_player_wins = True
         for row in range(3):
-            if self.board[row][row].character != self.players[self.current_player].character:
+            if self.board[row][row].character != self.player_chars[self.current_player]:
                 cur_player_wins = False
                 break
         if cur_player_wins:
@@ -114,7 +110,7 @@ class Game:
 
         cur_player_wins = True
         for row in range(3):
-            if self.board[row][2 - row].character != self.players[self.current_player].character:
+            if self.board[row][2 - row].character != self.player_chars[self.current_player]:
                 cur_player_wins = False
                 break
         if cur_player_wins:

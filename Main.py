@@ -52,8 +52,9 @@ while True:
 
     else:
         game = Game()
-        game.get_player_names()
-        game.specify_chars()
+        game.get_player_names(0)
+        game.get_player_names(1)
+        game.specify_chars("Please enter the first player's character (x/o): ")
         while True:
             game.show_board()
             game.next_move()
