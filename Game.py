@@ -32,9 +32,9 @@ def get_coordinates(given_game):
 class Game:
     def __init__(self):
         self.board = Board()
-        for i in range(3):
-            for j in range(3):
-                self.board[i][j].character = '-'
+        for row in range(3):
+            for col in range(3):
+                self.board[row][col].character = '-'
         self.players = [Player.Player(), Player.Player()]
         self.player_chars = ['', '']
         self.current_player = 0
@@ -82,39 +82,17 @@ class Game:
             print()
 
     def find_winner(self):
-        for row in range(3):
-            cur_player_wins = True
-            for col in range(3):
-                if self.board[row][col].character != self.player_chars[self.current_player]:
-                    cur_player_wins = False
-                    break
-            if cur_player_wins:
+        
+        # specifying the winning states
+        lines = ((0, 1, 2), (3, 4, 5), (6, 7, 8),
+                 (0, 3, 6), (1, 4, 7), (2, 5, 8),
+                 (0, 4, 8), (2, 4, 6))
+
+        for line in lines:
+            if (self.board[line[0] // 3][line[0] % 3].character == self.player_chars[self.current_player]
+                    and self.board[line[1] // 3][line[1] % 3].character == self.player_chars[self.current_player]
+                    and self.board[line[2] // 3][line[2] % 3].character == self.player_chars[self.current_player]):
                 return self.current_player
-
-        for col in range(3):
-            cur_player_wins = True
-            for row in range(3):
-                if self.board[row][col].character != self.player_chars[self.current_player]:
-                    cur_player_wins = False
-                    break
-            if cur_player_wins:
-                return self.current_player
-
-        cur_player_wins = True
-        for row in range(3):
-            if self.board[row][row].character != self.player_chars[self.current_player]:
-                cur_player_wins = False
-                break
-        if cur_player_wins:
-            return self.current_player
-
-        cur_player_wins = True
-        for row in range(3):
-            if self.board[row][2 - row].character != self.player_chars[self.current_player]:
-                cur_player_wins = False
-                break
-        if cur_player_wins:
-            return self.current_player
 
         for row in range(3):
             for col in range(3):

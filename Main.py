@@ -69,6 +69,6 @@ while True:
                 write_game_result(game, "Draw.")
             else:
                 game.show_board()
-                print(game.player_names[winner] + " wins!")
-                write_game_result(game, game.player_names[winner] + " won.")
+                print(game.players[winner].name + " wins!")
+                write_game_result(game, game.players[winner].name + " won.")
             break
