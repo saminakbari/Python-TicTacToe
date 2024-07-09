@@ -1,3 +1,4 @@
+import Player
 from Board import Board
 
 
@@ -34,23 +35,22 @@ class Game:
         for i in range(3):
             for j in range(3):
                 self.board[i][j].character = '-'
-        self.player_names = ['', '']
-        self.player_chars = ['', '']
+        self.players = [Player.Player(), Player.Player()]
         self.current_player = 0
 
-    def get_player_names(self):
+    def get_player_names(self, ):
         while True:
             print("Please enter the first player's name: ")
             i = input()
             if i != '':
-                self.player_names[0] = i
+                self.players[0].name = i
                 break
 
         while True:
             print("Please enter the second player's name: ")
             i = input()
             if i != '':
-                self.player_names[1] = i
+                self.players[1].name = i
                 break
 
     def specify_chars(self):
@@ -58,20 +58,20 @@ class Game:
         while True:
             char = input()
             if char == 'x' or char == 'X':
-                self.player_chars[0] = 'x'
-                self.player_chars[1] = 'o'
+                self.players[0].character = 'x'
+                self.players[1].character = 'o'
                 break
             elif char == 'o' or char == 'O':
-                self.player_chars[0] = 'o'
-                self.player_chars[1] = 'x'
+                self.players[0].character = 'o'
+                self.players[1].character = 'x'
                 break
             else:
                 print("Please enter either 'x' or 'o'")
 
     def next_move(self):
-        print(self.player_names[self.current_player] + " is now playing.")
+        print(self.players[self.current_player].name + " is now playing.")
         specified_cell = get_coordinates(self)
-        specified_cell.character = self.player_chars[self.current_player]
+        specified_cell.character = self.players[self.current_player].character
 
     def change_turn(self):
         if self.current_player == 0:
@@ -80,49 +80,48 @@ class Game:
             self.current_player = 0
 
     def show_board(self):
-        for i in range(3):
-            for j in range(3):
-                print(self.board[i][j].character, end=" ")
+        for row in range(3):
+            for col in range(3):
+                print(self.board[row][col].character, end=" ")
             print()
 
     def find_winner(self):
-
-        for i in range(3):
+        for row in range(3):
             cur_player_wins = True
-            for j in range(3):
-                if self.board[i][j].character != self.player_chars[self.current_player]:
+            for col in range(3):
+                if self.board[row][col].character != self.players[self.current_player].character:
                     cur_player_wins = False
                     break
             if cur_player_wins:
                 return self.current_player
 
-        for i in range(3):
+        for col in range(3):
             cur_player_wins = True
-            for j in range(3):
-                if self.board[j][i].character != self.player_chars[self.current_player]:
+            for row in range(3):
+                if self.board[row][col].character != self.players[self.current_player].character:
                     cur_player_wins = False
                     break
             if cur_player_wins:
                 return self.current_player
 
         cur_player_wins = True
-        for i in range(3):
-            if self.board[i][i].character != self.player_chars[self.current_player]:
+        for row in range(3):
+            if self.board[row][row].character != self.players[self.current_player].character:
                 cur_player_wins = False
                 break
         if cur_player_wins:
             return self.current_player
 
         cur_player_wins = True
-        for i in range(3):
-            if self.board[i][2 - i].character != self.player_chars[self.current_player]:
+        for row in range(3):
+            if self.board[row][2 - row].character != self.players[self.current_player].character:
                 cur_player_wins = False
                 break
         if cur_player_wins:
             return self.current_player
 
-        for i in range(3):
-            for j in range(3):
-                if self.board[i][j].character == '-':
+        for row in range(3):
+            for col in range(3):
+                if self.board[row][col].character == '-':
                     return -1  # Not finished.
         return 2  # No one wins.
