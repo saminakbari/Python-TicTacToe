@@ -1,5 +1,6 @@
 import Player
 from Board import Board
+from Board import DIMENSION
 
 
 def get_an_integer(message):
@@ -7,7 +8,7 @@ def get_an_integer(message):
     given_input = input()
     try:
         return int(given_input)
-    except:
+    except ValueError:
         return get_an_integer("Please enter an integer:")
 
 
@@ -15,13 +16,13 @@ def get_int_in_range(message, minimum, maximum, axis):
     given_input = get_an_integer(message)
     if minimum <= given_input <= maximum:
         return given_input
-    return get_int_in_range("The " + axis + " number must be between 1 and 3."
-                                            " Enter the " + axis + " again:", minimum, maximum, axis)
+    return get_int_in_range("The " + axis + " number must be between " + str(minimum) + " and " + str(maximum)
+                            + ". Enter the " + axis + " again:", minimum, maximum, axis)
 
 
 def get_coordinates(given_game):
-    entered_row = get_int_in_range("row: ", 1, 3, "row")
-    entered_col = get_int_in_range("column: ", 1, 3, "column")
+    entered_row = get_int_in_range("row: ", 1, DIMENSION, "row")
+    entered_col = get_int_in_range("column: ", 1, DIMENSION, "column")
 
     if given_game.board[entered_row - 1][entered_col - 1].character == '-':
         return given_game.board[entered_row - 1][entered_col - 1]
@@ -32,8 +33,8 @@ def get_coordinates(given_game):
 class Game:
     def __init__(self):
         self.board = Board()
-        for row in range(3):
-            for col in range(3):
+        for row in range(DIMENSION):
+            for col in range(DIMENSION):
                 self.board[row][col].character = '-'
         self.players = [Player.Player(), Player.Player()]
         self.player_chars = ['', '']
@@ -76,26 +77,33 @@ class Game:
             self.current_player = 0
 
     def show_board(self):
-        for row in range(3):
-            for col in range(3):
+        for row in range(DIMENSION):
+            for col in range(DIMENSION):
                 print(self.board[row][col].character, end=" ")
             print()
 
     def find_winner(self):
+        lines = []
 
-        # specifying the winning states
-        lines = ((0, 1, 2), (3, 4, 5), (6, 7, 8),
-                 (0, 3, 6), (1, 4, 7), (2, 5, 8),
-                 (0, 4, 8), (2, 4, 6))
+        # adding rows
+        for row_num in range(DIMENSION):
+            lines.append([i + row_num * DIMENSION for i in range(0, DIMENSION)])
+
+        # adding cols
+        for col_num in range(DIMENSION):
+            lines.append([i * DIMENSION + col_num for i in range(0, DIMENSION)])
+
+        # adding diameters
+        lines.append([i * (DIMENSION + 1) for i in range(0, DIMENSION)])
+        lines.append([i * (DIMENSION - 1) for i in range(1, DIMENSION + 1)])
 
         for line in lines:
-            if (self.board[line[0] // 3][line[0] % 3].character == self.player_chars[self.current_player]
-                    and self.board[line[1] // 3][line[1] % 3].character == self.player_chars[self.current_player]
-                    and self.board[line[2] // 3][line[2] % 3].character == self.player_chars[self.current_player]):
+            if all(self.board[line[i] // DIMENSION][line[i] % DIMENSION].character
+                   == self.player_chars[self.current_player] for i in range(0, DIMENSION)):
                 return self.current_player
 
-        for row in range(3):
-            for col in range(3):
+        for row in range(DIMENSION):
+            for col in range(DIMENSION):
                 if self.board[row][col].character == '-':
                     return -1  # Not finished.
         return 2  # No one wins.
